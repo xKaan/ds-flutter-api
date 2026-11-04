@@ -2,7 +2,8 @@
 
 function getBearerToken(): ?string
 {
-    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? (getallheaders()['Authorization'] ?? '');
+    $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+    $header = $headers['authorization'] ?? '';
 
     if (!preg_match('/^Bearer ([a-f0-9]{64})$/', $header, $matches)) {
         return null;
