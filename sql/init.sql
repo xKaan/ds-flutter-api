@@ -9,5 +9,5 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO users (first_name, last_name, email, password_hash, role) VALUES
-('Jean', 'Dupont', 'jean@example.com', '$argon2id$v=19$m=65536,t=4,p=1$QUtmQjd5QWtXR3dxNm0wSw$FWRfJve60zek9GKKgRtCxsHXS/wuuxMooVqMwuxtD4c', 2),
-('Marie', 'Martin', 'marie@example.com', '$argon2id$v=19$m=65536,t=4,p=1$UzE2NTFuZllpeWRUVWk3OQ$0mul/DzB4Z77Xe6ekC0HhcQgLObQDIwszToOgKxlBrc', 1);
+('Jean', 'Dupont', 'jean@example.com', '$2y$12$BFhWq8GP11oOTqaKyFzBlOAP8qw6s5tuAJFnThFsXKbRliYb8l.8i', 2),
+('Marie', 'Martin', 'marie@example.com', '$2y$12$RQOoy.OWkKkbZKKGsvn20OIQUE1DmnUM1nlBNXk1HxGr3y80m3zeC', 1);
