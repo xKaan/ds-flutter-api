@@ -5,6 +5,8 @@ require __DIR__ . '/config/db.php';
 // Pour éviter d'attendre le temps de la vérification de mot de passe si l'utilisateur demandé n'existe pas en base
 const DUMMY_HASH = '$2y$12$ts72dk1wGQMoYxc6HBQ3beueMdPWD6XMKMhZ5ghEpLRNtrn2OLrK2';
 
+const TOKEN_LIFETIME_DAYS = 7;
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -72,10 +74,25 @@ if (!$user || !$passwordIsValid) {
     sendResponse(400);
 }
 
+// Token aléatoire renvoyé au client, seul son hash est stocké en base
+$token = bin2hex(random_bytes(32));
+$expiresAt = (new DateTimeImmutable('+' . TOKEN_LIFETIME_DAYS . ' days'))->format('Y-m-d H:i:s');
+
+try {
+    $tokenQuery = getDatabase()->prepare(
+        'INSERT INTO tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)'
+    );
+    $tokenQuery->execute([$user['id'], hash('sha256', $token), $expiresAt]);
+} catch (PDOException $exception) {
+    error_log($exception->getMessage());
+    sendResponse(500);
+}
+
 sendResponse(200, [
     'id'        => $user['id'],
     'firstName' => $user['first_name'],
     'lastName'  => $user['last_name'],
     'email'     => $user['email'],
     'role'      => $user['role'],
+    'token'     => $token,
 ]);
